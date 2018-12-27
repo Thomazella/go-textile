@@ -126,7 +126,7 @@ func init() {
 		&daemonCmd{})
 	parser.AddCommand("commands",
 		"List available commands",
-		"List all available textile commands.",
+		"List all available command-line tools.",
 		&commandsCmd{})
 
 	// add cmd commands

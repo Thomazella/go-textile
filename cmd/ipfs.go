@@ -3,14 +3,16 @@ package cmd
 import (
 	"errors"
 	"io"
+	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/textileio/textile-go/ipfs"
 )
 
 var errMissingMultiAddress = errors.New("missing peer multi address")
-var errMissingCID = errors.New("missing IPFS CID")
+var errMissingCID = errors.New("IPFS CID not found")
 
 func init() {
 	register(&swarmCmd{})
@@ -118,7 +120,12 @@ func (x *ipfsCatCmd) Long() string {
 func (x *ipfsCatCmd) Execute(args []string) error {
 	setApi(x.Client)
 	if len(args) == 0 {
-		return errMissingCID
+		data, err := ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			return errMissingCID
+		}
+		arg := strings.Split(strings.TrimSpace(string(data)), " ")[0]
+		args = append(args, arg)
 	}
 
 	req, err := request(GET, "ipfs/"+args[0], params{
