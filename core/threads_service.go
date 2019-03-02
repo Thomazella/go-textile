@@ -227,10 +227,30 @@ func (h *ThreadsService) handleIgnore(thrd *Thread, hash mh.Multihash, block *pb
 
 // handleFlag receives a flag message
 func (h *ThreadsService) handleFlag(thrd *Thread, hash mh.Multihash, block *pb.ThreadBlock) error {
-	if _, err := thrd.handleFlagBlock(hash, block); err != nil {
+	msg, err := thrd.handleFlagBlock(hash, block)
+	if err != nil {
 		return err
 	}
-	return nil
+
+	target := h.datastore.Blocks().Get(msg.Target)
+	if target == nil {
+		return nil
+	}
+	var desc string
+	if target.Author == h.service.Node().Identity.Pretty() {
+		desc = "your " + threadSubject(thrd.Schema.Name)
+	} else {
+		desc = "a " + threadSubject(thrd.Schema.Name)
+	}
+
+	note := h.newNotification(block.Header, pb.Notification_FLAG_ADDED)
+	note.Body = "flagged " + desc
+	note.Block = hash.B58String()
+	note.Target = target.Target
+	note.SubjectDesc = thrd.Name
+	note.Subject = thrd.Id
+
+	return h.sendNotification(note)
 }
 
 // handleJoin receives a join message

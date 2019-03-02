@@ -198,6 +198,7 @@ message Notification {
         FILES_ADDED         = 5;
         COMMENT_ADDED       = 6;
         LIKE_ADDED          = 7;
+        FLAG_ADDED          = 8;
     }
 
     // view info

@@ -35,7 +35,7 @@ var ErrNotShareable = errors.New("thread is not shareable")
 // ErrNotReadable indicates the thread is not readable
 var ErrNotReadable = errors.New("thread is not readable")
 
-// ErrNotAnnotatable indicates the thread is not annotatable (comments/likes)
+// ErrNotAnnotatable indicates the thread is not annotatable (comments/likes/flags)
 var ErrNotAnnotatable = errors.New("thread is not annotatable")
 
 // ErrNotWritable indicates the thread is not writable (files/messages)

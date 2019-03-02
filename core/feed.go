@@ -18,6 +18,7 @@ var flatFeedTypes = []pb.Block_BlockType{
 	pb.Block_TEXT,
 	pb.Block_COMMENT,
 	pb.Block_LIKE,
+	pb.Block_FLAG,
 }
 
 var annotatedFeedTypes = []pb.Block_BlockType{
@@ -37,6 +38,7 @@ type feedItemOpts struct {
 	annotations bool
 	comments    []*pb.Comment
 	likes       []*pb.Like
+	flags       []*pb.Flag
 	target      *pb.FeedItem
 }
 
@@ -184,6 +186,7 @@ func (t *Textile) feedItem(block *pb.Block, opts feedItemOpts) (*pb.FeedItem, er
 func (t *Textile) feedStackItem(stack feedStack) (*pb.FeedItem, error) {
 	var comments []*pb.Comment
 	var likes []*pb.Like
+	var flags []*pb.Flag
 
 	// Does the stack contain the initial target,
 	// or is it a continuation stack of just annotations?
@@ -203,6 +206,12 @@ func (t *Textile) feedStackItem(stack feedStack) (*pb.FeedItem, error) {
 				return err
 			}
 			likes = append(likes, like)
+		case pb.Block_FLAG:
+			flag, err := t.flag(child, feedItemOpts{annotations: true})
+			if err != nil {
+				return err
+			}
+			flags = append(flags, flag)
 		default:
 			target = child
 		}
@@ -236,6 +245,7 @@ func (t *Textile) feedStackItem(stack feedStack) (*pb.FeedItem, error) {
 	targetItem, err := t.feedItem(target, feedItemOpts{
 		comments: comments,
 		likes:    likes,
+		flags:    flags,
 	})
 	if err != nil {
 		return nil, err
@@ -312,7 +322,7 @@ func GetFeedItemPayload(item *pb.FeedItem) (FeedItemPayload, error) {
 
 func getTargetId(block *pb.Block) string {
 	switch block.Type {
-	case pb.Block_COMMENT, pb.Block_LIKE:
+	case pb.Block_COMMENT, pb.Block_LIKE, pb.Block_FLAG:
 		return block.Target
 	default:
 		return block.Id
@@ -321,7 +331,7 @@ func getTargetId(block *pb.Block) string {
 
 func isAnnotation(block *pb.Block) bool {
 	switch block.Type {
-	case pb.Block_COMMENT, pb.Block_LIKE:
+	case pb.Block_COMMENT, pb.Block_LIKE, pb.Block_FLAG:
 		return true
 	default:
 		return false

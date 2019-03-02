@@ -64,9 +64,16 @@ func (t *Textile) message(block *pb.Block, opts feedItemOpts) (*pb.Text, error) 
 			return nil, err
 		}
 		item.Likes = likes.Items
+
+		flags, err := t.Flags(block.Id)
+		if err != nil {
+			return nil, err
+		}
+		item.Flags = flags.Items
 	} else {
 		item.Comments = opts.comments
 		item.Likes = opts.likes
+		item.Flags = opts.flags
 	}
 
 	return item, nil

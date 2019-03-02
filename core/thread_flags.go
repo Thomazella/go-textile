@@ -61,14 +61,11 @@ func (t *Thread) handleFlagBlock(hash mh.Multihash, block *pb.ThreadBlock) (*pb.
 		return nil, ErrNotAnnotatable
 	}
 
-	// TODO: how do we want to handle flags? making visible to UIs would be a good start
-
 	if err := t.indexBlock(&commitResult{
 		hash:   hash,
 		header: block.Header,
 	}, pb.Block_FLAG, msg.Target, ""); err != nil {
 		return nil, err
 	}
-
 	return msg, nil
 }

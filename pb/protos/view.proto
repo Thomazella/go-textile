@@ -115,6 +115,10 @@ message Flag {
     FeedItem target                = 4;
 }
 
+message FlagList {
+    repeated Flag items = 1;
+}
+
 message Join {
     string block                   = 1;
     google.protobuf.Timestamp date = 2;
@@ -142,6 +146,7 @@ message Text {
     string body                    = 4;
     repeated Comment comments      = 5;
     repeated Like likes            = 6;
+    repeated Flag flags            = 7;
 }
 
 message TextList {
@@ -164,6 +169,7 @@ message Files {
     repeated Comment comments      = 7;
     repeated Like likes            = 8;
     repeated string threads        = 9;
+    repeated Flag flags            = 10;
 }
 
 message FilesList {
@@ -176,6 +182,7 @@ message Comment {
     User user                      = 3;
     string body                    = 4;
     FeedItem target                = 5;
+    repeated Flag flags            = 6;
 }
 
 message CommentList {
@@ -191,10 +198,6 @@ message Like {
 
 message LikeList {
     repeated Like items = 1;
-}
-
-message FlagList {
-    repeated Flag items = 1;
 }
 
 // UPDATES //
