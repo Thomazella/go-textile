@@ -193,6 +193,10 @@ message LikeList {
     repeated Like items = 1;
 }
 
+message FlagList {
+    repeated Flag items = 1;
+}
+
 // UPDATES //
 
 message WalletUpdate {

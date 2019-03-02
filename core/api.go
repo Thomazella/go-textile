@@ -176,6 +176,13 @@ func (a *api) Start() {
 					likes.POST("", a.addBlockLikes)
 					likes.GET("", a.lsBlockLikes)
 				}
+
+				block.GET("/flag", a.getBlockFlag)
+				flags := block.Group("/flags")
+				{
+					flags.POST("", a.addBlockFlags)
+					flags.GET("", a.lsBlockFlags)
+				}
 			}
 		}
 

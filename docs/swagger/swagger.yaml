@@ -266,6 +266,26 @@ definitions:
           $ref: '#/definitions/pb.Files'
         type: array
     type: object
+  pb.Flag:
+    properties:
+      block:
+        type: string
+      date:
+        type: string
+      target:
+        $ref: '#/definitions/pb.FeedItem'
+        type: object
+      user:
+        $ref: '#/definitions/pb.User'
+        type: object
+    type: object
+  pb.FlagList:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/pb.Flag'
+        type: array
+    type: object
   pb.InviteView:
     properties:
       date:
@@ -713,6 +733,85 @@ paths:
           schema:
             type: string
       summary: Add a comment
+      tags:
+      - blocks
+  /blocks/{id}/flag:
+    get:
+      description: Gets a thread flag by block ID
+      parameters:
+      - description: block id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: flag
+          schema:
+            $ref: '#/definitions/pb.Flag'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get thread flag
+      tags:
+      - blocks
+  /blocks/{id}/flags:
+    get:
+      description: Lists flags on a thread block
+      parameters:
+      - description: block id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: flags
+          schema:
+            $ref: '#/definitions/pb.FlagList'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List flags
+      tags:
+      - blocks
+    post:
+      description: Adds a flag to a thread block
+      parameters:
+      - description: block id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: flag
+          schema:
+            $ref: '#/definitions/pb.Flag'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add a flag
       tags:
       - blocks
   /blocks/{id}/like:
