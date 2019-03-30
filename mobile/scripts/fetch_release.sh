@@ -3,7 +3,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 IOS_DIR="${DIR}/../dist/ios"
 ANDROID_DIR="${DIR}/../dist/android"
-VER=$1
+VER=0.1.11
 
 # fetch iOS framework
 rm -rf ${IOS_DIR}
